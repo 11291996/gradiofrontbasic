@@ -1,14 +1,15 @@
-#basic example of gradio
+#basic examples of gradio
 import gradio as gr
 
+#most simple text interface
 def greet(name):
     return "Hello " + name + "!"
-#most simple text interface
 
 demo1 = gr.Interface(fn=greet, inputs="text", outputs="text")
 
 #changing the interface
-demo2 = gr.Interface(fn=greet, inputs=gr.Textbox(lines = 2, placeholder = "Name Here..."), outputs="text")
+#placeholder is the text that appears in the input box
+demo2 = gr.Interface(fn=greet, inputs=gr.Textbox(lines = 2, placeholder = "Name Here..."), outputs="text") 
 
 #multiple inputs and outputs
 def greet_temp(name, is_morning, temperature): #this will be the input list below
@@ -20,6 +21,7 @@ def greet_temp(name, is_morning, temperature): #this will be the input list belo
 
 demo3 = gr.Interface(
     fn=greet_temp,
+    #checkboxes are used for boolean values
     inputs=["text", "checkbox", gr.Slider(0, 100)], #gets input interfaces as a list
     outputs=["text", "text"]
 )
@@ -50,7 +52,7 @@ demo5 = gr.ChatInterface(random_response)
 #creating blocks, enables more customization
 
 with gr.Blocks() as demo6: #creates blocks called demo6
-    name = gr.Textbox(label="Name")
+    name = gr.Textbox(label="Name") #label is the text that appears above the input box
     output = gr.Textbox(label="Greeting")
     greet_btn = gr.Button("Greet")
     #when the button is clicked, it will call the greet function
@@ -75,7 +77,7 @@ with gr.Blocks() as demo7:
         text_output = gr.Textbox()
         text_button = gr.Button("Flip")
     with gr.Tab("Flip Image"):
-        with gr.Row():
+        with gr.Row(): #puts elements below as a row
             image_input = gr.Image()
             image_output = gr.Image()
         image_button = gr.Button("Flip")
