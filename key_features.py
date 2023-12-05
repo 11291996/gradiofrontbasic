@@ -65,9 +65,62 @@ demo5 = gr.Interface(start_process, inputs = "text", outputs = "text", flagging_
 
 #preprocessing and postprocessing 
 #pre
-input_img = gr.Image(shape=(100, 100), type="pil") #getting data as PIL 
+input_img = gr.Image(height = 100, width = 100, type="pil") #getting data as PIL 
 #post
-output_img = gr.Image(invert_colors=True, type="numpy") #returning numpy array
+output_img = gr.Image(image_mode="I", type="numpy") #returning numpy array
+
+#style
+demo6 = gr.Interface(start_process, inputs = "text", outputs = "text", theme = gr.themes.Monochrome())
+
+with gr.Interface(start_process, inputs = "text", outputs = "text", css=".gradio-container {backgroud-color: red}") as demo7: 
+    #css can be passed to gradio as well 
+    pass #basic class is called gradio-container
+
+#queue 
+demo6.queue() #limits the number of requests that are processed at a single time
+#this prevents hardware errors
+
+with gr.Blocks() as demo7:
+    btn = gr.Button("Run")
+    def hi():
+        return "hi"
+    output = gr.Textbox(label = "output")
+    btn.click(hi, None, output)
+
+#iterative output 
+#use python yield 
+import numpy as np
+import time
+
+def fake_diffusion(steps):
+    for _ in range(steps):
+        time.sleep(1) #show the speed of the iteration
+        image = np.random.random((600, 600, 3))
+        yield image
+    image = np.ones((1000,1000,3), np.uint8)
+    image[:] = [255, 124, 0]
+    yield image
+
+demo8 = gr.Interface(fake_diffusion, inputs=gr.Slider(1, 10), outputs="image") 
+#3rd argument of a slider shows how many digits with the float
+
+#define queue - required for generators
+demo8.queue()
+
+#progressive bar
+
+def slowly_reverse(word, progress=gr.Progress()): #creating progress bar
+    #if Progress() has track_tqdm=True -> tqdm is tracked if the function uses it
+    progress(0, desc="Starting")
+    time.sleep(1)
+    progress(0.05)
+    new_string = ""
+    for letter in progress.tqdm(word, desc="Reversing"):
+        time.sleep(0.25)
+        new_string = letter + new_string
+    return new_string
+
+demo9 = gr.Interface(slowly_reverse, gr.Textbox(), gr.Textbox())
 
 if __name__ == "__main__":
-    demo5.launch() #launches the interface
+    demo9.launch() #launches the interface

@@ -23,6 +23,7 @@ demo3 = gr.Interface(
     fn=greet_temp,
     #checkboxes are used for boolean values
     inputs=["text", "checkbox", gr.Slider(0, 100)], #gets input interfaces as a list
+    #slider shows range
     outputs=["text", "text"]
 )
 
