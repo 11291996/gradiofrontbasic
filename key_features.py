@@ -27,7 +27,10 @@ demo1 = gr.Interface(
         [3.14, "divide", 2],
         [144, "multiply", 2.5],
         [0, "subtract", 1.2],
-    ],
+    ], #this list can be a string dir with log.csv which will give the examples
+    #if one of the input is given as None, it is provide pratial example 
+    #if argument cache_examples=True -> examples will be cached and provided quickly to the users
+    #automatically saved in gradio_cached_examples dir which is saved in GRADIO_EXAMPLES_CACHE global variable 
     title="Toy Calculator", #demo title
     description="Here's a sample toy calculator. Allows you to calculate things like 2+2=4", #demo description like a markdown
 )

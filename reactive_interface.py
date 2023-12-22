@@ -39,14 +39,14 @@ demo2 = gr.Interface(
 
 demo2.launch()
 
-#
+#audio streaming demo
 from pydub import AudioSegment
 from time import sleep
 
-with gr.Blocks() as demo:
+with gr.Blocks() as demo3:
     input_audio = gr.Audio(label="Input Audio", type="filepath", format="mp3") 
-    with gr.Row():
-        with gr.Column():
+    with gr.Row(): 
+        with gr.Column(): #puts elements in a column #this is under the row box
             stream_as_file_btn = gr.Button("Stream as File")
             format = gr.Radio(["wav", "mp3"], value="wav", label="Format")
             stream_as_file_output = gr.Audio(streaming=True) #this component streams out audio streaming data
