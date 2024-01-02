@@ -139,7 +139,7 @@ with gr.Blocks() as demo7:
     
 def change_textbox(choice):
     if choice == "short":
-        return gr.Textbox(lines=2, visible=True)
+        return gr.Textbox(lines=2, visible=True) #visible is true by default
     elif choice == "long":
         return gr.Textbox(lines=8, visible=True, value="Lorem ipsum dolor sit amet")
     else:
@@ -247,3 +247,29 @@ with gr.Blocks() as demo11:
 
 demo11.queue().launch()
 
+#using decorator with gr.on
+with gr.Blocks() as demo12:
+    name = gr.Textbox(label="Name")
+    output = gr.Textbox(label="Output Box")
+    greet_btn = gr.Button("Greet")
+
+    @gr.on(triggers=[name.submit, greet_btn.click], inputs=name, outputs=output)
+    def greet(name):
+        return "Hello " + name + "!"
+
+demo12.launch()
+
+#if the triggers are not defined, gr.on will automatically detect the triggers and use them all 
+
+with gr.Blocks() as demo13:
+    with gr.Row():
+        num1 = gr.Slider(1, 10)
+        num2 = gr.Slider(1, 10)
+        num3 = gr.Slider(1, 10)
+    output = gr.Number(label="Sum")
+
+    @gr.on(inputs=[num1, num2, num3], outputs=output)
+    def sum(a, b, c):
+        return a + b + c
+
+demo13.launch()
