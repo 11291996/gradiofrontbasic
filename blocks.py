@@ -273,3 +273,66 @@ with gr.Blocks() as demo13:
         return a + b + c
 
 demo13.launch()
+
+#using blocks like python functions
+
+#first define a block
+
+pipe = pipeline("translation", model="t5-base")
+
+
+def translate(text):
+    return pipe(text)[0]["translation_text"]
+
+
+with gr.Blocks() as demo14:
+    with gr.Row():
+        with gr.Column():
+            english = gr.Textbox(label="English text")
+            translate_btn = gr.Button(value="Translate")
+        with gr.Column():
+            german = gr.Textbox(label="German Text")
+
+    translate_btn.click(translate, inputs=english, outputs=german, api_name="translate-to-german")
+    examples = gr.Examples(examples=["I went to the supermarket yesterday.", "Helen is a good swimmer."],
+                           inputs=[english])
+
+#this block is embedded in huggingface space 
+    
+english_translator = gr.load(name="spaces/gradio/english_translator") #now the blocks above become a function
+english_generator = pipeline("text-generation", model="distilgpt2")
+
+
+def generate_text(text):
+    english_text = english_generator(text)[0]["generated_text"]
+    german_text = english_translator(english_text)
+    return english_text, german_text
+
+
+with gr.Blocks() as demo15:
+    with gr.Row():
+        with gr.Column():
+            seed = gr.Text(label="Input Phrase")
+        with gr.Column():
+            english = gr.Text(label="Generated English Text")
+            german = gr.Text(label="Generated German Text")
+    btn = gr.Button("Generate")
+    btn.click(generate_text, inputs=[seed], outputs=[english, german])
+    gr.Examples(["My name is Clara and I am"], inputs=[seed])
+
+demo15.launch()
+
+#also from the block that has became a function, function can be extracted
+
+#using defined api
+def generate_text_api(text):
+    english_text = english_generator(text, api_name="translate-to-german")[0]["generated_text"]
+    german_text = english_translator(english_text)
+    return english_text, german_text
+
+#using the order of defined functions
+
+def generate_text_order(text):
+    english_text = english_generator(text, fn_index=1)[0]["generated_text"]
+    german_text = english_translator(english_text)
+    return english_text, german_text
