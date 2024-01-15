@@ -57,7 +57,8 @@ with gr.Blocks() as demo6: #creates blocks called demo6
     output = gr.Textbox(label="Greeting")
     greet_btn = gr.Button("Greet")
     #when the button is clicked, it will call the greet function
-    greet_btn.click(fn=greet, inputs=name, outputs=output, api_name="greet") #also stored as an api
+    greet_btn.click(fn=greet, inputs=name, outputs=output, api_name="greet") #also stored as an api 
+    #all api can be checked in api page under gradio ui
 
 #more applications 
 
